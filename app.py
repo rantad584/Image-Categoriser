@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Accept post requests to this route
 @app.route('/upload', methods=['POST'])
 def main():
-    obj = json.loads(request.get_json()) # get request and convert to python object
+    obj = request.get_json() # get request and convert to python object
 
     file = obj['image']
 
