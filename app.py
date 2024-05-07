@@ -7,19 +7,15 @@ app = Flask(__name__)
 # Accept post requests to this route
 @app.route('/upload', methods=['POST'])
 def main():
-    if 'imageFile' not in request.files:
-        return 'No file part', 400
+    obj = json.loads(request.get_json()) # get request and convert to python object
 
-    file = request.files['imageFile']
-
-    if file.filename == '':
-        return 'No selected file', 400
+    file = obj['image']
 
     return json.dumps(
         {
             'class': 'glass',
             'confidence:': '80%',
-            'filename': file.filename
+            'filename': file
         }
     , indent=4)
 
