@@ -26,20 +26,21 @@ class_names = [
 
 def predict_category(image_string):
     try:
-        image = Image.open(BytesIO(b64decode(image_string))) # decode base64 encoded image and create up PIL instance
+        image = Image.open(BytesIO(b64decode(image_string))).convert('RGB') # decode base64 encoded image and create up PIL instance
 
         # Resize and preprocess the image
         image = tf.expand_dims(keras.utils.img_to_array(image.resize((256, 256))), axis=0)
 
         prediction = model.predict(image)
-        score = tf.nn.softmax(prediction[0])
+        scores = tf.nn.softmax(prediction[0])
 
-        return json.dumps(
-            {
-                'category': class_names[np.argmax(score)],
-                'confidence:': f'{np.max(score) * 100}%'
-            }
-        , indent=4)
+        top_indices = np.argsort(scores)[-3:][::-1]
+
+        result = {}
+        for i in top_indices:
+            result[class_names[i]] = f'{np.round(scores[i].numpy() * 100, 2)}%'
+
+        return json.dumps(result, indent=4)
 
     except Exception as e:
         print(f'Exception {e}')
