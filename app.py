@@ -38,7 +38,7 @@ def predict_category(image_string):
 
         result = {}
         for i in top_indices:
-            result[class_names[i]] = f'{np.round(scores[i].numpy() * 100, 2)}%'
+            result[class_names[i]] = np.round(scores[i].numpy() * 100, 2)
 
         return json.dumps(result, indent=4)
 
