@@ -26,7 +26,8 @@ class_names = [
 
 def predict_category(image_string):
     try:
-        image = Image.open(BytesIO(b64decode(image_string))).convert('RGB') # decode base64 encoded image and create up PIL instance
+        # decode base64 encoded image and create up PIL instance
+        image = Image.open(BytesIO(b64decode(image_string))).convert('RGB')
 
         # Resize and preprocess the image
         image = tf.expand_dims(keras.utils.img_to_array(image.resize((256, 256))), axis=0)
@@ -46,7 +47,7 @@ def predict_category(image_string):
         print(f'Exception {e}')
 
 # Accept post requests to this route
-@app.route('/upload', methods=['POST'])
+@app.route('/', methods=['POST'])
 def main():
     obj = request.get_json() # get request and convert to python object
 
